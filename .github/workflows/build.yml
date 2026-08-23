@@ -1,0 +1,35 @@
+name: Build calculator.py
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: 'pip'
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          if (Test-Path requirements.txt) { pip install -r requirements.txt }
+          pip install pyinstaller
+
+      - name: Compile check
+        run: python -m py_compile calculator.py
+
+      - name: Build EXE
+        run: pyinstaller --onefile --name ScientificCalculator calculator.py
+
+      - name: Upload EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: ScientificCalculator-EXE
+          path: dist/ScientificCalculator.exe

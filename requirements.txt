@@ -1,0 +1,3 @@
+# ScientificCalculator requirements
+# Pure Python 3.10+ standard library based, optional packages for distribution:
+pytest>=7.0.0
